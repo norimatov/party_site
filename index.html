@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Onajonimga 8 Mart tabrigi - Qo'shiq bilan</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            min-height: 100vh;
+            background: linear-gradient(145deg, #ffdde1, #ffb6c1, #ff9eb5);
+            font-family: 'Segoe UI', 'Arial', cursive, sans-serif;
+            position: relative;
+            overflow-x: hidden;
+            font-size: 16px; /* Mobil uchun asosiy shrift */
+        }
+        
+        /* Suzuvchi yurakchalar */
+        .floating-hearts {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        .heart-particle {
+            position: absolute;
+            color: rgba(255, 105, 180, 0.5);
+            font-size: 30px;
+            animation: floatHeart 8s linear infinite;
+            filter: drop-shadow(0 0 10px hotpink);
+        }
+        
+        @keyframes floatHeart {
+            0% {
+                transform: translateY(100vh) rotate(0deg) scale(0.5);
+                opacity: 0;
+            }
+            20% {
+                opacity: 0.8;
+            }
+            100% {
+                transform: translateY(-20vh) rotate(720deg) scale(1.5);
+                opacity: 0;
+            }
+        }
+        
+        /* Asosiy konteyner */
+        .container {
+            position: relative;
+            z-index: 10;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px 15px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        /* Musiqa pleer - MOBIL UCHUN KATTALASHTIRILDI */
+        .music-player {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 60px;
+            padding: 20px 25px;
+            margin: 20px 0;
+            box-shadow: 0 20px 40px rgba(255,105,180,0.3), 0 0 0 3px white inset;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            justify-content: center;
+            width: 100%;
+            max-width: 600px;
+            animation: playerGlow 2s ease-in-out infinite;
+        }
+        
+        @keyframes playerGlow {
+            0%, 100% { box-shadow: 0 20px 40px rgba(255,105,180,0.3), 0 0 0 3px white inset; }
+            50% { box-shadow: 0 30px 60px rgba(255,20,147,0.5), 0 0 0 5px #ffb6c1 inset; }
+        }
+        
+        .music-icon {
+            font-size: 70px; /* Kattalashtirildi */
+            animation: spin 5s linear infinite;
+            cursor: pointer;
+        }
+        
+        .music-icon.paused {
+            animation-play-state: paused;
+        }
+        
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        .music-info {
+            flex: 1;
+            min-width: 180px;
+        }
+        
+        .music-title {
+            font-size: 2.2em; /* Kattalashtirildi */
+            color: #d4145a;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+        
+        .music-artist {
+            font-size: 1.6em; /* Kattalashtirildi */
+            color: #666;
+        }
+        
+        .music-controls {
+            display: flex;
+            gap: 20px; /* Kattalashtirildi */
+            align-items: center;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .music-btn {
+            background: linear-gradient(45deg, #ff1493, #ff69b4);
+            border: none;
+            width: 70px; /* Kattalashtirildi */
+            height: 70px; /* Kattalashtirildi */
+            border-radius: 50%;
+            color: white;
+            font-size: 32px; /* Kattalashtirildi */
+            cursor: pointer;
+            transition: 0.3s;
+            border: 3px solid white;
+            box-shadow: 0 5px 15px rgba(255,20,147,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .music-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 10px 25px hotpink;
+        }
+        
+        .music-btn.playing {
+            background: linear-gradient(45deg, #ff6b6b, #ffb6c1);
+        }
+        
+        .volume-slider {
+            width: 120px; /* Kengaytirildi */
+            height: 8px; /* Qalinlashtirildi */
+            background: #ffb6c1;
+            border-radius: 10px;
+            appearance: none;
+        }
+        
+        .volume-slider::-webkit-slider-thumb {
+            appearance: none;
+            width: 25px; /* Kattalashtirildi */
+            height: 25px; /* Kattalashtirildi */
+            background: #ff1493;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 3px solid white;
+        }
+        
+        /* Ona va farzand animatsiyasi - KATTALASHTIRILDI */
+        .mother-child {
+            position: relative;
+            width: 300px; /* Kattalashtirildi */
+            height: 300px; /* Kattalashtirildi */
+            margin: 20px 0;
+            animation: gentleFloat 4s ease-in-out infinite;
+        }
+        
+        @keyframes gentleFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        .mother-silhouette {
+            position: absolute;
+            width: 240px; /* Kattalashtirildi */
+            height: 240px; /* Kattalashtirildi */
+            background: linear-gradient(145deg, #ff9a9e, #fad0c4);
+            border-radius: 60% 60% 40% 40%;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            box-shadow: 0 20px 40px rgba(255,105,180,0.3);
+        }
+        
+        .mother-silhouette::before {
+            content: '👩‍🦰';
+            position: absolute;
+            font-size: 140px; /* Kattalashtirildi */
+            top: -50px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        .child-silhouette {
+            position: absolute;
+            width: 120px; /* Kattalashtirildi */
+            height: 120px; /* Kattalashtirildi */
+            background: linear-gradient(145deg, #fbc2eb, #a6c1ee);
+            border-radius: 50%;
+            bottom: 30px;
+            right: 20px;
+            box-shadow: 0 10px 20px rgba(147,112,219,0.3);
+            animation: childMove 3s ease-in-out infinite;
+        }
+        
+        .child-silhouette::before {
+            content: '👶';
+            position: absolute;
+            font-size: 80px; /* Kattalashtirildi */
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        @keyframes childMove {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(15px, -15px); }
+        }
+        
+        .heart-connection {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 200px; /* Kattalashtirildi */
+            height: 200px; /* Kattalashtirildi */
+            background: radial-gradient(circle, rgba(255,105,180,0.3) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: pulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.2); opacity: 0.8; }
+        }
+        
+        /* Sarlavha - KATTALASHTIRILDI */
+        .main-title {
+            text-align: center;
+            margin: 30px 0;
+        }
+        
+        .main-title h1 {
+            font-size: 5.5em; /* Kattalashtirildi */
+            background: linear-gradient(45deg, #d4145a, #fbb03b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 10px 30px rgba(255,20,147,0.3);
+        }
+        
+        .main-title h2 {
+            font-size: 3em; /* Kattalashtirildi */
+            color: white;
+            text-shadow: 2px 2px 10px #ff1493;
+        }
+        
+        /* Qo'shiq matni - KATTALASHTIRILDI */
+        .lyrics-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 40px 20px;
+            border-radius: 80px;
+            box-shadow: 0 30px 60px rgba(255,105,180,0.3);
+            margin: 30px 0;
+            max-width: 700px;
+            width: 100%;
+            position: relative;
+            border: 3px solid white;
+        }
+        
+        .lyrics-card h3 {
+            font-size: 2.8em; /* Kattalashtirildi */
+            color: #d4145a;
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        
+        .lyrics {
+            font-size: 2.2em; /* Kattalashtirildi */
+            line-height: 1.8;
+            text-align: center;
+            color: #444;
+            white-space: pre-line;
+        }
+        
+        .lyrics span {
+            display: inline-block;
+            animation: lyricWave 2s ease-in-out infinite;
+            cursor: pointer;
+            margin: 0 2px;
+        }
+        
+        .lyrics span:hover {
+            color: #ff1493;
+            transform: scale(1.2);
+        }
+        
+        @keyframes lyricWave {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+        
+        /* Onajon fazilatlari - KATTALASHTIRILDI */
+        .virtues {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            margin: 30px 0;
+        }
+        
+        .virtue {
+            background: white;
+            padding: 20px 30px;
+            border-radius: 60px;
+            font-size: 2em; /* Kattalashtirildi */
+            color: #d4145a;
+            box-shadow: 0 10px 20px rgba(255,105,180,0.2);
+            border: 3px solid white;
+            transform: rotate(var(--rot));
+            transition: 0.3s;
+            cursor: pointer;
+        }
+        
+        .virtue:nth-child(1) { --rot: -3deg; }
+        .virtue:nth-child(2) { --rot: 2deg; }
+        .virtue:nth-child(3) { --rot: -1deg; }
+        .virtue:nth-child(4) { --rot: 4deg; }
+        .virtue:nth-child(5) { --rot: -2deg; }
+        .virtue:nth-child(6) { --rot: 1deg; }
+        
+        .virtue:hover {
+            transform: rotate(0deg) scale(1.1);
+            background: linear-gradient(45deg, #fff0f5, #ffe0f0);
+            box-shadow: 0 15px 30px hotpink;
+        }
+        
+        /* Onajon uchun tilaklar - KATTALASHTIRILDI */
+        .wishes-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr); /* Mobil uchun 2 ustun */
+            gap: 20px;
+            width: 100%;
+            margin: 30px 0;
+        }
+        
+        .wish-item {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px 15px;
+            border-radius: 50px;
+            text-align: center;
+            transition: 0.5s;
+            cursor: pointer;
+            border: 3px solid white;
+            box-shadow: 0 15px 30px rgba(255,105,180,0.2);
+        }
+        
+        .wish-item:hover {
+            transform: translateY(-15px) scale(1.05);
+            box-shadow: 0 30px 50px rgba(255,20,147,0.3);
+        }
+        
+        .wish-icon {
+            font-size: 70px; /* Kattalashtirildi */
+            margin-bottom: 15px;
+            animation: bounce 1s infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+        
+        .wish-text {
+            font-size: 2em; /* Kattalashtirildi */
+            color: #d4145a;
+            font-weight: bold;
+        }
+        
+        /* Onajon uchun maxsus tugma - KATTALASHTIRILDI */
+        .mother-special-btn {
+            background: linear-gradient(45deg, #ff1493, #ff69b4, #ffb6c1);
+            border: none;
+            color: white;
+            padding: 30px 40px;
+            font-size: 3em; /* Kattalashtirildi */
+            border-radius: 100px;
+            cursor: pointer;
+            transition: 0.5s;
+            margin: 30px 0;
+            border: 4px solid white;
+            box-shadow: 0 30px 50px rgba(255,105,180,0.5);
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+            max-width: 500px;
+        }
+        
+        .mother-special-btn::before {
+            content: '🎵';
+            position: absolute;
+            left: -30px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 50px;
+            opacity: 0;
+            transition: 0.5s;
+        }
+        
+        .mother-special-btn::after {
+            content: '🎵';
+            position: absolute;
+            right: -30px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 50px;
+            opacity: 0;
+            transition: 0.5s;
+        }
+        
+        .mother-special-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 50px 80px hotpink;
+        }
+        
+        .mother-special-btn:hover::before {
+            left: 20px;
+            opacity: 1;
+        }
+        
+        .mother-special-btn:hover::after {
+            right: 20px;
+            opacity: 1;
+        }
+        
+        /* Onajon uchun modal - KATTALASHTIRILDI */
+        .mother-modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: linear-gradient(145deg, white, #fff0f5);
+            padding: 40px 25px;
+            border-radius: 80px;
+            z-index: 1000;
+            max-width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 50px 100px rgba(255,20,147,0.5), 0 0 0 15px #ffb6c1 inset;
+            animation: modalAppear 0.5s;
+            text-align: center;
+        }
+        
+        @keyframes modalAppear {
+            from {
+                transform: translate(-50%, -50%) scale(0) rotate(-180deg);
+                opacity: 0;
+            }
+            to {
+                transform: translate(-50%, -50%) scale(1) rotate(0);
+                opacity: 1;
+            }
+        }
+        
+        .mother-modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255,192,203,0.8);
+            backdrop-filter: blur(10px);
+            z-index: 999;
+        }
+        
+        .close-mother-modal {
+            position: absolute;
+            top: 20px;
+            right: 25px;
+            font-size: 60px;
+            cursor: pointer;
+            color: #ff1493;
+            transition: 0.3s;
+        }
+        
+        .close-mother-modal:hover {
+            transform: scale(1.3) rotate(90deg);
+        }
+        
+        .mother-modal-content h1 {
+            font-size: 4em; /* Kattalashtirildi */
+            color: #ff1493;
+            margin-bottom: 20px;
+        }
+        
+        .mother-modal-content p {
+            font-size: 2.5em; /* Kattalashtirildi */
+            line-height: 1.6;
+            color: #d4145a;
+            margin: 20px 0;
+        }
+        
+        /* Natija xabari - KATTALASHTIRILDI */
+        #resultMessage {
+            font-size: 2.5em; /* Kattalashtirildi */
+            color: white;
+            text-shadow: 0 0 20px hotpink;
+            margin: 30px 0;
+            text-align: center;
+            min-height: 80px;
+            padding: 0 15px;
+        }
+        
+        /* Telefon uchun maxsus sozlashlar */
+        @media (max-width: 480px) {
+            body {
+                font-size: 14px;
+            }
+            
+            .main-title h1 {
+                font-size: 4em;
+            }
+            
+            .main-title h2 {
+                font-size: 2.2em;
+            }
+            
+            .music-player {
+                padding: 15px;
+            }
+            
+            .music-title {
+                font-size: 1.8em;
+            }
+            
+            .music-artist {
+                font-size: 1.4em;
+            }
+            
+            .music-btn {
+                width: 60px;
+                height: 60px;
+                font-size: 28px;
+            }
+            
+            .music-icon {
+                font-size: 50px;
+            }
+            
+            .volume-slider {
+                width: 100px;
+            }
+            
+            .lyrics {
+                font-size: 1.8em;
+            }
+            
+            .virtue {
+                font-size: 1.6em;
+                padding: 15px 20px;
+            }
+            
+            .wish-icon {
+                font-size: 50px;
+            }
+            
+            .wish-text {
+                font-size: 1.6em;
+            }
+            
+            .mother-special-btn {
+                font-size: 2.2em;
+                padding: 25px 20px;
+            }
+            
+            .mother-modal-content h1 {
+                font-size: 3em;
+            }
+            
+            .mother-modal-content p {
+                font-size: 2em;
+            }
+            
+            .close-mother-modal {
+                font-size: 50px;
+                top: 10px;
+                right: 15px;
+            }
+            
+            #resultMessage {
+                font-size: 2em;
+            }
+        }
+        
+        /* Juda kichik ekranlar uchun */
+        @media (max-width: 360px) {
+            .main-title h1 {
+                font-size: 3.2em;
+            }
+            
+            .main-title h2 {
+                font-size: 1.8em;
+            }
+            
+            .wishes-grid {
+                grid-template-columns: 1fr; /* Bitta ustun */
+            }
+            
+            .music-controls {
+                gap: 10px;
+            }
+            
+            .music-btn {
+                width: 50px;
+                height: 50px;
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Suzuvchi yurakchalar -->
+    <div class="floating-hearts" id="floatingHearts"></div>
+    
+    <!-- Onajon uchun modal -->
+    <div class="mother-modal-overlay" id="motherModalOverlay" onclick="closeMotherModal()"></div>
+    <div class="mother-modal" id="motherModal">
+        <span class="close-mother-modal" onclick="closeMotherModal()">&times;</span>
+        <div class="mother-modal-content">
+            <h1>👩‍👧‍👦 ONGIZGA 👩‍👧‍👦</h1>
+            <p>
+                ❤️ Dunyodagi eng mehribon inson ❤️<br>
+                <br>
+                Siz mening quyoshimsiz,<br>
+                Siz mening yulduzim,<br>
+                Siz mening baxtim,<br>
+                Siz mening hayotimsiz!<br>
+                <br>
+                🎵 Bu qo'shiq siz uchun! 🎵<br>
+                <br>
+                Onajon, sizni juda-juda sevaman!<br>
+                <br>
+                🌸 8-MART BAYRAMINGIZ MUBORAK! 🌸
+            </p>
+            <div style="font-size: 5em; margin-top: 20px;">
+                👩‍👧💝👩‍👧
+            </div>
+        </div>
+    </div>
+    
+    <div class="container">
+        <!-- Ona va farzand animatsiyasi -->
+        <div class="mother-child">
+            <div class="mother-silhouette"></div>
+            <div class="child-silhouette"></div>
+            <div class="heart-connection"></div>
+        </div>
+        
+        <!-- Sarlavha -->
+        <div class="main-title">
+            <h1>8 - MART</h1>
+            <h2>🌷 ONALAR BAYRAMI 🌷</h2>
+        </div>
+        
+        <!-- MUSIQA PLEER -->
+        <div class="music-player">
+            <div class="music-icon" id="musicIcon" onclick="toggleMusic()">💿</div>
+            <div class="music-info">
+                <div class="music-title" id="songTitle">Ona haqida qo'shiq</div>
+                <div class="music-artist" id="songArtist">Onajonim uchun</div>
+            </div>
+            <div class="music-controls">
+                <button class="music-btn" id="playPauseBtn" onclick="toggleMusic()">▶️</button>
+                <button class="music-btn" onclick="stopMusic()">⏹️</button>
+                <input type="range" class="volume-slider" id="volumeSlider" min="0" max="1" step="0.1" value="0.7" onchange="setVolume(this.value)">
+            </div>
+        </div>
+        
+        <!-- AUDIO ELEMENT (yashirin) -->
+        <audio id="bgMusic" loop preload="auto">
+            <!-- BU YERGA O'ZINGIZNING QO'SHIQ FAYLINGIZNI JOYLASHTIRING -->
+            <source src="./Malika_Ravshanova_-_Bu_mening_onam.m4a" type="audio/mpeg">
+            <source src="ona_haqida.ogg" type="audio/ogg">
+            Sizning brauzeringiz audio elementni qo'llab-quvvatlamaydi.
+        </audio>
+        
+        <!-- QO'SHIQ MATNI -->
+        <div class="lyrics-card">
+            <h3>🎵 "ONAJON" 🎵</h3>
+            <div class="lyrics" id="lyrics">
+                <span>O</span><span>n</span><span>a</span><span>j</span><span>o</span><span>n</span><span>,</span> 
+                <span>o</span><span>n</span><span>a</span><span>j</span><span>o</span><span>n</span><span>,</span><br>
+                <span>s</span><span>i</span><span>z</span> 
+                <span>m</span><span>e</span><span>n</span><span>i</span><span>n</span><span>g</span><br>
+                <span>q</span><span>u</span><span>y</span><span>o</span><span>s</span><span>h</span><span>i</span><span>m</span><span>s</span><span>i</span><span>z</span><span>,</span><br>
+                <span>y</span><span>u</span><span>l</span><span>d</span><span>u</span><span>z</span><span>i</span><span>m</span><span>s</span><span>i</span><span>z</span><span>,</span><br>
+                <span>h</span><span>a</span><span>y</span><span>o</span><span>t</span><span>i</span><span>m</span><span>s</span><span>i</span><span>z</span><span>!</span><br>
+                <br>
+                <span>💝</span> <span>8</span> <span>M</span><span>a</span><span>r</span><span>t</span> <span>b</span><span>a</span><span>y</span><span>r</span><span>a</span><span>m</span><span>i</span><span>n</span><span>g</span><span>i</span><span>z</span> 
+                <span>m</span><span>u</span><span>b</span><span>o</span><span>r</span><span>a</span><span>k</span><span>!</span> <span>💝</span>
+            </div>
+        </div>
+        
+        <!-- Onajon fazilatlari -->
+        <div class="virtues">
+            <div class="virtue" onclick="showVirtue('mehribon')">🤱 Mehribon</div>
+            <div class="virtue" onclick="showVirtue('g\'amxo\'r')">💝 G'amxo'r</div>
+            <div class="virtue" onclick="showVirtue('sabrli')">🌟 Sabrli</div>
+            <div class="virtue" onclick="showVirtue('kuchli')">💪 Kuchli</div>
+            <div class="virtue" onclick="showVirtue('go\'zal')">🌹 Go'zal</div>
+            <div class="virtue" onclick="showVirtue('farishta')">😇 Farishta</div>
+        </div>
+        
+        <!-- Onajon uchun tilaklar -->
+        <div class="wishes-grid">
+            <div class="wish-item" onclick="activateWish(this, 'sog\'lik')">
+                <div class="wish-icon">💝</div>
+                <div class="wish-text">Sog'lik</div>
+            </div>
+            <div class="wish-item" onclick="activateWish(this, 'baxt')">
+                <div class="wish-icon">😊</div>
+                <div class="wish-text">Baxt</div>
+            </div>
+            <div class="wish-item" onclick="activateWish(this, 'omad')">
+                <div class="wish-icon">🍀</div>
+                <div class="wish-text">Omad</div>
+            </div>
+            <div class="wish-item" onclick="activateWish(this, 'quvonch')">
+                <div class="wish-icon">✨</div>
+                <div class="wish-text">Quvonch</div>
+            </div>
+        </div>
+        
+        <!-- Onajon uchun maxsus tugma -->
+        <button class="mother-special-btn" onclick="motherSurprise()">
+            🎵 ONAMGA 🎵
+        </button>
+        
+        <!-- Natija xabari -->
+        <div id="resultMessage"></div>
+    </div>
+    
+    <script>
+        // Audio elementni olish
+        const audio = document.getElementById('bgMusic');
+        const playPauseBtn = document.getElementById('playPauseBtn');
+        const musicIcon = document.getElementById('musicIcon');
+        let isPlaying = false;
+        
+        // Yurakchalar yaratish
+        function createHearts() {
+            const container = document.getElementById('floatingHearts');
+            for (let i = 0; i < 40; i++) {
+                const heart = document.createElement('div');
+                heart.className = 'heart-particle';
+                heart.style.left = Math.random() * 100 + '%';
+                heart.style.animationDuration = (Math.random() * 5 + 5) + 's';
+                heart.style.animationDelay = Math.random() * 5 + 's';
+                heart.style.fontSize = (Math.random() * 30 + 20) + 'px';
+                heart.innerHTML = ['❤️', '💖', '💗', '💓', '💕', '💝', '🎵', '🎶'][Math.floor(Math.random() * 8)];
+                container.appendChild(heart);
+            }
+        }
+        
+        // Musiqa funksiyalari
+        function toggleMusic() {
+            if (isPlaying) {
+                audio.pause();
+                playPauseBtn.innerHTML = '▶️';
+                musicIcon.classList.add('paused');
+                musicIcon.style.animation = 'none';
+            } else {
+                audio.play().catch(e => {
+                    console.log('Avtomatik o\'ynatish bloklandi:', e);
+                    document.getElementById('resultMessage').innerHTML = '🎵 Qo\'shiqni o\'ynatish uchun "ONAMGA" tugmasini bosing!';
+                });
+                playPauseBtn.innerHTML = '⏸️';
+                musicIcon.classList.remove('paused');
+                musicIcon.style.animation = 'spin 5s linear infinite';
+            }
+            isPlaying = !isPlaying;
+        }
+        
+        function stopMusic() {
+            audio.pause();
+            audio.currentTime = 0;
+            playPauseBtn.innerHTML = '▶️';
+            isPlaying = false;
+            musicIcon.classList.add('paused');
+            musicIcon.style.animation = 'none';
+        }
+        
+        function setVolume(value) {
+            audio.volume = value;
+        }
+        
+        // Fazilatlarni ko'rsatish
+        function showVirtue(type) {
+            const messages = {
+                'mehribon': '🤱 Eng mehribon inson - bu onajon!',
+                'g\'amxo\'r': '💝 G\'amxo\'rligingiz uchun rahmat!',
+                'sabrli': '🌟 Sabringizga qoyil!',
+                'kuchli': '💪 Kuchli va bardoshli onajon!',
+                'go\'zal': '🌹 Go\'zalligingiz aslo so\'nmasin!',
+                'farishta': '😇 Farishtam, sizni sevaman!'
+            };
+            
+            document.getElementById('resultMessage').innerHTML = messages[type] || '✨ Onajon, siz eng yaxshisiz!';
+            
+            // Qisqa musiqa effekti
+            if (!isPlaying) {
+                audio.volume = 0.3;
+                audio.play().catch(e => {});
+                setTimeout(() => {
+                    audio.pause();
+                    audio.currentTime = 0;
+                }, 2000);
+            }
+        }
+        
+        // Wishni aktivlashtirish
+        function activateWish(element, type) {
+            const wishes = {
+                'sog\'lik': '💝 Sog\'lig\'ingiz mustahkam bo\'lsin!',
+                'baxt': '😊 Baxt hamisha yo\'ldosh bo\'lsin!',
+                'omad': '🍀 Omad siz bilan!',
+                'quvonch': '✨ Har kuni quvonch bilan to\'lsin!'
+            };
+            
+            element.style.transform = 'scale(1.1)';
+            element.style.background = '#ffb6c1';
+            setTimeout(() => {
+                element.style.transform = '';
+                element.style.background = '';
+            }, 500);
+            
+            document.getElementById('resultMessage').innerHTML = wishes[type];
+            
+            // Yurakchalar
+            for (let i = 0; i < 5; i++) {
+                setTimeout(() => {
+                    const heart = document.createElement('div');
+                    heart.className = 'heart-particle';
+                    heart.style.left = '50%';
+                    heart.style.top = '50%';
+                    heart.style.animationDuration = '1.5s';
+                    heart.innerHTML = '💝';
+                    document.body.appendChild(heart);
+                    setTimeout(() => heart.remove(), 1500);
+                }, i * 100);
+            }
+        }
+        
+        // Onajon kutilmagan sovg'asi
+        function motherSurprise() {
+            openMotherModal();
+            
+            // Musiqani o'ynatish
+            audio.volume = 0.7;
+            audio.play().catch(e => {
+                console.log('Avtomatik o\'ynatish bloklandi');
+            });
+            isPlaying = true;
+            playPauseBtn.innerHTML = '⏸️';
+            musicIcon.classList.remove('paused');
+            musicIcon.style.animation = 'spin 5s linear infinite';
+            
+            // Ko'plab yurakchalar va notalar
+            for (let i = 0; i < 50; i++) {
+                setTimeout(() => {
+                    const particle = document.createElement('div');
+                    particle.className = 'heart-particle';
+                    particle.style.left = Math.random() * 100 + '%';
+                    particle.style.top = '-10%';
+                    particle.style.animationDuration = '3s';
+                    particle.style.fontSize = (Math.random() * 40 + 20) + 'px';
+                    particle.innerHTML = ['❤️', '💖', '🎵', '🎶', '💝', '✨'][Math.floor(Math.random() * 6)];
+                    document.body.appendChild(particle);
+                    setTimeout(() => particle.remove(), 3000);
+                }, i * 50);
+            }
+            
+            document.getElementById('resultMessage').innerHTML = '🎵 Onajon, bu qo\'shiq sizga! 🎵';
+        }
+        
+        // Modal oynani ochish
+        function openMotherModal() {
+            document.getElementById('motherModalOverlay').style.display = 'block';
+            document.getElementById('motherModal').style.display = 'block';
+        }
+        
+        // Modal oynani yopish
+        function closeMotherModal() {
+            document.getElementById('motherModalOverlay').style.display = 'none';
+            document.getElementById('motherModal').style.display = 'none';
+        }
+        
+        // Sahifa yuklanganda
+        window.onload = function() {
+            createHearts();
+            
+            // Audio yuklanganda
+            audio.addEventListener('loadeddata', () => {
+                console.log('Qo\'shiq tayyor!');
+            });
+            
+            // Har 10 sekundda avtomatik tilak
+            setInterval(() => {
+                const wishes = document.querySelectorAll('.wish-item');
+                const randomWish = wishes[Math.floor(Math.random() * wishes.length)];
+                if (randomWish) {
+                    randomWish.style.transform = 'scale(1.05)';
+                    setTimeout(() => {
+                        randomWish.style.transform = '';
+                    }, 500);
+                }
+            }, 10000);
+        };
+    </script>
+</body>
+</html>
